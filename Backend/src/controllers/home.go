@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"strconv"
 	"time"
 
@@ -29,16 +28,22 @@ func GetHome(c *gin.Context) {
 
 // CreateHome creates a new home
 func CreateHome(c *gin.Context) {
-	completed, _ := strconv.Atoi(c.PostForm("completed"))
-	log.Println(completed)
+	var lat32 float32
+	var lng32 float32
+
+	lat64, _ := strconv.ParseFloat(c.PostForm("lat"), 32)
+	lng64, _ := strconv.ParseFloat(c.PostForm("lng"), 32)
+
+	lat32 = float32(lat64)
+	lng32 = float32(lng64)
 
 	home := &models.Home{
 		Images:   nil,
-		Lat:      0,
-		Lng:      0,
+		Lat:      lat32,
+		Lng:      lng32,
 		MovedIn:  time.Now(),
 		MovedOut: time.Now(),
-		Name:     "Basement",
+		Name:     c.PostForm("name"),
 	}
 
 	result := database.Database.Create(home)
