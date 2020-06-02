@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Router wut
+// Router is the global router object
 var Router *gin.Engine
 
-// CreateURLMappings wut
+// CreateURLMappings creates the router for Gin
 func CreateURLMappings() {
 	Router = gin.Default()
 	Router.Use(controllers.Cors())
