@@ -13,14 +13,16 @@ import (
 
 // GetAllHomes gets all homes
 func GetAllHomes(c *gin.Context) {
-	var records []models.Home
-	result := database.Database.Find(&records)
+	var homes []models.Home
+
+	result := database.Database.Find(&homes)
 
 	if result.Error != nil {
-		panic("duhhhh")
+		lib.HandleErrorJSON(c, result.Error.Error())
+		return
 	}
 
-	c.JSON(200, result.Value)
+	c.JSON(200, homes)
 }
 
 // GetHome gets a home based on ID

@@ -15,8 +15,8 @@ func CreateURLMappings() {
 	// v1 of the API
 	v1 := Router.Group("/v1")
 	{
-		v1.GET("/homes/:id", controllers.GetHome)
 		v1.GET("/homes", controllers.GetAllHomes)
+		v1.GET("/homes/:id", controllers.GetHome)
 		v1.POST("/homes", controllers.CreateHome)
 		v1.PUT("/homes/:id", controllers.UpdateHome)
 		v1.DELETE("/homes/:id", controllers.DeleteHome)
