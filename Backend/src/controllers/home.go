@@ -74,6 +74,15 @@ func CreateHome(c *gin.Context) {
 func UpdateHome(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 
+	var home models.Home
+
+	result := database.Database.First(&home, id)
+
+	if result.Error != nil {
+		lib.HandleErrorJSON(c, result.Error.Error())
+		return
+	}
+
 	lat32 := lib.CoordToFloat32(c.PostForm("lat"))
 	lng32 := lib.CoordToFloat32(c.PostForm("lng"))
 
@@ -81,10 +90,6 @@ func UpdateHome(c *gin.Context) {
 	movedOut := lib.DateStrToTime(c.PostForm("movedOut"))
 
 	imageJSON := c.PostForm("images")
-
-	var home models.Home
-
-	database.Database.First(&home, id)
 
 	database.Database.Model(&home).Updates(models.Home{
 		Images:   imageJSON,

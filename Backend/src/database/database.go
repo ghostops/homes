@@ -1,6 +1,10 @@
 package database
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/ghostops/home/src/models"
 
 	"github.com/jinzhu/gorm"
@@ -14,10 +18,19 @@ var Database *gorm.DB
 
 // ConnectDb _
 func ConnectDb() {
-	db, err := gorm.Open("mysql", "home:home@tcp(db:3306)/home?charset=utf8&parseTime=true")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	database := os.Getenv("DB_DATABASE")
+
+	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", user, password, host, port, database)
+
+	db, err := gorm.Open("mysql", connection)
 
 	if err != nil {
-		panic("failed to connect database")
+		log.Println(err)
+		log.Fatal(connection)
 	}
 
 	// Migrate the schema

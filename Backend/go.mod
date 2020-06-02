@@ -21,6 +21,7 @@ require (
 	github.com/jcmturner/gokrb5/v8 v8.3.0 // indirect
 	github.com/jinzhu/gorm v1.9.12
 	github.com/jinzhu/now v1.1.1 // indirect
+	github.com/joho/godotenv v1.3.0
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.6.0 // indirect

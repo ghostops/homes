@@ -1,1 +1,4 @@
 Backend/main
+Backend/.env
+*.tmp
+.env.production

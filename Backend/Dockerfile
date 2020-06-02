@@ -1,4 +1,7 @@
-FROM golang:latest
+#
+# Builder stage
+#
+FROM golang:latest AS builder
 
 WORKDIR /app
 
@@ -6,8 +9,19 @@ COPY ./ /app
 
 RUN go mod download
 
-RUN go get github.com/githubnemo/CompileDaemon
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./src
 
-EXPOSE 8080
+#
+# Deployment stage
+#
 
-ENTRYPOINT CompileDaemon --build="go build src/main.go" --command=./main
+FROM alpine:latest AS deployment
+
+WORKDIR /app
+
+COPY --from=builder /app/.env.production ./.env
+COPY --from=builder /app/main ./main
+
+ENV GIN_MODE=release
+
+CMD "./main"
