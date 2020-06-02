@@ -6,7 +6,11 @@ import (
 )
 
 func main() {
+	// Start the database connection
 	database.ConnectDb()
+
+	// Close the database connection on defer
+	defer database.Database.Close()
 
 	router.CreateURLMappings()
 	router.Router.Run(":8080")

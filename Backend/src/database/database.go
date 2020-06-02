@@ -20,10 +20,8 @@ func ConnectDb() {
 		panic("failed to connect database")
 	}
 
-	// defer db.Close()
-
 	// Migrate the schema
-	db.AutoMigrate(&models.Home{}, &models.HomeImage{})
+	db.AutoMigrate(&models.Home{})
 
 	// // Create
 	// db.Create(&Product{Code: "L1212", Price: 1000})
