@@ -7,6 +7,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gin-gonic/gin"
 	"github.com/nleeper/goment"
 )
@@ -66,4 +67,23 @@ func CreateS3Path(key string) string {
 	url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com%s%s", os.Getenv("S3_BUCKET_NAME"), os.Getenv("AWS_REGION"), extraSlash, key)
 
 	return url
+}
+
+// CreateS3PathString creates a string to retrieve S3 images in sub folders
+func CreateS3PathString(homeID string) string {
+	s3Path := RemoveFirstLetter(os.Getenv("S3_IMAGE_PATH"))
+
+	return s3Path + "/" + homeID + "/"
+}
+
+// S3ToUrls takes S3 objects and turns them in to a list of URLs
+func S3ToUrls(contents *s3.ListObjectsOutput) []string {
+	urls := []string{}
+
+	for index := range contents.Contents {
+		path := CreateS3Path(*contents.Contents[index].Key)
+		urls = append(urls, path)
+	}
+
+	return urls
 }

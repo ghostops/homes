@@ -6,6 +6,7 @@ import (
 
 	"github.com/ghostops/home/src/database"
 	"github.com/ghostops/home/src/lib"
+	"github.com/ghostops/home/src/marshal"
 	"github.com/ghostops/home/src/models"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +23,14 @@ func GetAllHomes(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, homes)
+	var marshaledHomes []marshal.HomeMarshal
+
+	for _, home := range homes {
+		m := marshal.Home(home)
+		marshaledHomes = append(marshaledHomes, m)
+	}
+
+	c.JSON(200, marshaledHomes)
 }
 
 // GetHome gets a home based on ID
@@ -38,7 +46,9 @@ func GetHome(c *gin.Context) {
 
 	var home *models.Home = result.Value.(*models.Home)
 
-	c.JSON(200, home)
+	marshaled := marshal.Home(*home)
+
+	c.JSON(200, marshaled)
 }
 
 // CreateHome creates a new home
@@ -49,10 +59,7 @@ func CreateHome(c *gin.Context) {
 	movedIn := lib.DateStrToTime(c.PostForm("movedIn"))
 	movedOut := lib.DateStrToTime(c.PostForm("movedOut"))
 
-	imageJSON := c.PostForm("images")
-
 	home := &models.Home{
-		Images:   imageJSON,
 		Lat:      lat32,
 		Lng:      lng32,
 		MovedIn:  movedIn,
@@ -67,7 +74,9 @@ func CreateHome(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, home)
+	marshaled := marshal.Home(*home)
+
+	c.JSON(200, marshaled)
 }
 
 // UpdateHome updated a home based on ID
@@ -89,10 +98,7 @@ func UpdateHome(c *gin.Context) {
 	movedIn := lib.DateStrToTime(c.PostForm("movedIn"))
 	movedOut := lib.DateStrToTime(c.PostForm("movedOut"))
 
-	imageJSON := c.PostForm("images")
-
 	database.Database.Model(&home).Updates(models.Home{
-		Images:   imageJSON,
 		Lat:      lat32,
 		Lng:      lng32,
 		MovedIn:  movedIn,
@@ -100,7 +106,9 @@ func UpdateHome(c *gin.Context) {
 		Name:     c.PostForm("name"),
 	})
 
-	c.JSON(200, home)
+	marshaled := marshal.Home(home)
+
+	c.JSON(200, marshaled)
 }
 
 // DeleteHome deletes a home based on ID
@@ -121,5 +129,7 @@ func DeleteHome(c *gin.Context) {
 	now := time.Now()
 	home.DeletedAt = &now
 
-	c.JSON(200, home)
+	marshaled := marshal.Home(home)
+
+	c.JSON(200, marshaled)
 }

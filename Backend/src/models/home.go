@@ -12,7 +12,6 @@ type Home struct {
 	MovedIn  time.Time
 	MovedOut time.Time
 	Name     string `gorm:"size:255"`
-	Images   string `sql:"type:text;"`
 	Lat      float32
 	Lng      float32
 }

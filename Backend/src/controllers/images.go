@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"os"
-
 	"github.com/ghostops/home/src/lib"
 	"github.com/gin-gonic/gin"
 )
@@ -10,23 +8,18 @@ import (
 // GetImagesForHome gets all images for a home ID
 func GetImagesForHome(c *gin.Context) {
 	homeID := c.Param("id")
-	s3Path := lib.RemoveFirstLetter(os.Getenv("S3_IMAGE_PATH"))
-	contents, err := lib.ListObjects(s3Path + "/" + homeID + "/")
+	s3Path := lib.CreateS3PathString(homeID)
+	contents, err := lib.ListObjects(s3Path)
 
 	if err != nil {
 		c.JSON(200, gin.H{"error": err.Error()})
 		return
 	}
 
-	files := []string{}
-
-	for index := range contents.Contents {
-		path := lib.CreateS3Path(*contents.Contents[index].Key)
-		files = append(files, path)
-	}
+	images := lib.S3ToUrls(contents)
 
 	c.JSON(200, gin.H{
-		"Images": files,
+		"Images": images,
 	})
 }
 
