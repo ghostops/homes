@@ -1,8 +1,11 @@
 package lib
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"time"
+	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nleeper/goment"
@@ -41,4 +44,26 @@ func HandleErrorJSON(c *gin.Context, err string) {
 	c.JSON(500, gin.H{
 		"error": err,
 	})
+}
+
+// RemoveFirstLetter removes the first rune of a string
+func RemoveFirstLetter(s string) string {
+	_, i := utf8.DecodeRuneInString(s)
+	return s[i:]
+}
+
+// CreateS3Path combines S3 values to a URL of an object
+func CreateS3Path(key string) string {
+	// if first rune is /
+	isSlash := key[0] == 47
+
+	extraSlash := "/"
+
+	if isSlash {
+		extraSlash = ""
+	}
+
+	url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com%s%s", os.Getenv("S3_BUCKET_NAME"), os.Getenv("AWS_REGION"), extraSlash, key)
+
+	return url
 }

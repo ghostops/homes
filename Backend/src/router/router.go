@@ -26,5 +26,8 @@ func CreateURLMappings() {
 		v1.POST("/homes", controllers.CreateHome)
 		v1.PUT("/homes/:id", controllers.UpdateHome)
 		v1.DELETE("/homes/:id", controllers.DeleteHome)
+
+		v1.GET("/images/home/:id", controllers.GetImagesForHome)
+		v1.POST("/images/home/:id", controllers.UploadImageForHome)
 	}
 }

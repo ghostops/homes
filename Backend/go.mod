@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/pubsub v1.4.0 // indirect
 	dmitri.shuralyov.com/gpu/mtl v0.0.0-20191203043605-d42048ed14fd // indirect
 	github.com/BurntSushi/xgb v0.0.0-20200324125942-20f126ea2843 // indirect
-	github.com/aws/aws-sdk-go v1.31.10 // indirect
+	github.com/aws/aws-sdk-go v1.31.10
 	github.com/cncf/udpa/go v0.0.0-20200508205342-3b31d022a144 // indirect
 	github.com/creack/pty v1.1.11 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20200428022330-06a60b6afbbc // indirect
@@ -19,6 +19,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/google/pprof v0.0.0-20200507031123-427632fa3b1c // indirect
+	github.com/google/uuid v1.1.1
 	github.com/ianlancetaylor/demangle v0.0.0-20200524003926-2c5affb30a03 // indirect
 	github.com/jcmturner/gokrb5/v8 v8.3.0 // indirect
 	github.com/jinzhu/gorm v1.9.12

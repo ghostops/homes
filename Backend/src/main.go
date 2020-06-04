@@ -6,6 +6,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/ghostops/home/src/database"
+	"github.com/ghostops/home/src/lib"
 	"github.com/ghostops/home/src/router"
 )
 
@@ -15,6 +16,9 @@ func main() {
 	if err != nil {
 		log.Print("[WARNING] Error loading .env file, fallback to OS env!")
 	}
+
+	// Start the AWS connection for S3 images
+	lib.StartAwsSession()
 
 	// Start the database connection
 	database.ConnectDb()
