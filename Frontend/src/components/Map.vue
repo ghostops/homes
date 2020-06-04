@@ -5,13 +5,20 @@
             :mapStyle="mapStyle"
             :zoom="zoom"
             :center="center"
+            @click="onMapClick"
         >
             <MglMarker
                 v-for="home in homes"
                 :key="home.id"
                 :coordinates="[home.Lng, home.Lat]"
                 color="blue"
-                @click="lol(home)"
+                @click="selectHome(home)"
+            />
+
+            <MglMarker
+                v-if="newHomeMarker"
+                :coordinates="[newHomeMarker.lng, newHomeMarker.lat]"
+                color="red"
             />
         </MglMap>
     </div>
@@ -39,6 +46,9 @@ export default {
         homes() {
             return this.$store.state.homes;
         },
+        newHomeMarker() {
+            return this.$store.state.newHomeCoords;
+        },
     },
     created() {
         // We need to set mapbox-gl library here in order to use it in template
@@ -47,7 +57,14 @@ export default {
         this.$store.commit('loadHomes');
     },
     methods: {
-        lol: (a) => alert(JSON.stringify(a)),
+        selectHome(home) {
+            this.$store.commit('selectHome', home);
+        },
+        onMapClick({ mapboxEvent }) {
+            if (this.$store.state.createNewHome === 'coords') {
+                this.$store.commit('setNewHomeCoords', mapboxEvent.lngLat);
+            }
+        },
     },
 };
 </script>
@@ -55,6 +72,6 @@ export default {
 <style>
     #mapContainer {
         height: 100%;
-        width: 100%;
+        width: 70%;
     }
 </style>

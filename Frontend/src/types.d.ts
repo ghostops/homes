@@ -1,3 +1,5 @@
+declare module 'querystring';
+
 interface IHome {
     CreatedAt: string;
     DeletedAt: string;

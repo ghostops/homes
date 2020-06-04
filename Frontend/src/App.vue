@@ -6,11 +6,28 @@
             <router-link to="/map">Map</router-link>
         </div> -->
 
+        <Map></Map>
+
         <router-view/>
     </div>
 </template>
 
+<script>
+import Map from '@/components/Map.vue';
+
+export default {
+    name: 'App',
+    components: {
+        Map,
+    },
+};
+</script>
+
 <style>
+    * {
+        box-sizing: border-box;
+    }
+
     html,
     body,
     #app,
@@ -25,5 +42,10 @@
         text-align: center;
         color: #2c3e50;
         margin: 0;
+    }
+
+    #app {
+        display: flex;
+        flex-direction: row;
     }
 </style>

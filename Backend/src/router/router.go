@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/ghostops/home/src/controllers"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +12,12 @@ var Router *gin.Engine
 // CreateURLMappings creates the router for Gin
 func CreateURLMappings() {
 	Router = gin.Default()
-	Router.Use(controllers.Cors())
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+
+	Router.Use(cors.New(config))
+
 	// v1 of the API
 	v1 := Router.Group("/v1")
 	{
