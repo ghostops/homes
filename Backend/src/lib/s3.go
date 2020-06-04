@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"log"
 	"mime/multipart"
@@ -63,6 +64,10 @@ func UploadImageToS3(header *multipart.FileHeader, homeID string) (*s3.PutObject
 	file.Read(buffer)
 	fileBytes := bytes.NewReader(buffer)
 	fileType := http.DetectContentType(buffer)
+
+	if fileType != "image/png" && fileType != "image/jpg" && fileType != "image/jpeg" {
+		return nil, errors.New("invalid filetype " + fileType)
+	}
 
 	split := strings.Split(fileType, "/")
 	fileEnding := split[len(split)-1]
