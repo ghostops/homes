@@ -42,6 +42,7 @@ export default new Vuex.Store<AppState>({
         setCreateNewHome: (state, value: CreateHomeStage) => {
             if (value === 'not') {
                 state.newHomeCoords = null;
+                state.newHomeName = null;
             }
 
             state.createNewHome = value;
@@ -58,6 +59,10 @@ export default new Vuex.Store<AppState>({
                 lat: state.newHomeCoords?.lat as number,
                 lng: state.newHomeCoords?.lng as number,
             });
+
+            // Reset old values
+            state.newHomeName = null;
+            state.newHomeCoords = null;
 
             state.homes = [...state.homes, home];
         },

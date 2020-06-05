@@ -37,6 +37,11 @@ export default {
             return this.$store.state.createNewHome === 'info';
         },
     },
+    mounted() {
+        if (this.$store.state.createNewHome === 'not') {
+            this.$router.push({ path: '/' });
+        }
+    },
     methods: {
         onHomeNameChange() {
             this.$store.commit('setNewHomeName', this.newHomeName);

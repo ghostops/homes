@@ -19,9 +19,14 @@
                 v-if="showContinue"
                 @click="continueNewHome"
             >
-                <p>
-                    Continue
-                </p>
+                Continue
+            </button>
+
+            <button
+                v-if="showDone"
+                @click="confirmNewHome"
+            >
+                Done
             </button>
         </div>
     </footer>
@@ -49,6 +54,9 @@ export default {
                 && this.$store.state.createNewHome !== 'done'
             );
         },
+        showDone() {
+            return (this.$store.state.createNewHome === 'done');
+        },
     },
     methods: {
         addNewHome() {
@@ -69,10 +77,11 @@ export default {
             } else if (state === 'info') {
                 this.$store.commit('setCreateNewHome', 'done');
                 this.$store.commit('addNewHome');
-            } else if (state === 'done') {
-                this.$router.push({ path: '/' });
-                this.$store.commit('setCreateNewHome', 'not');
             }
+        },
+        confirmNewHome() {
+            this.$router.push({ path: '/' });
+            this.$store.commit('setCreateNewHome', 'not');
         },
     },
 };
