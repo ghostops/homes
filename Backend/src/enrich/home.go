@@ -1,4 +1,4 @@
-package marshal
+package enrich
 
 import (
 	"fmt"
@@ -8,8 +8,8 @@ import (
 	"github.com/ghostops/home/src/models"
 )
 
-// HomeMarshal marshals the Home db Struct
-type HomeMarshal struct {
+// HomeEnriched enriches the Home DB Struct
+type HomeEnriched struct {
 	ID       uint
 	MovedIn  time.Time
 	MovedOut time.Time
@@ -19,14 +19,14 @@ type HomeMarshal struct {
 	Images   []string
 }
 
-// Home executes the marshal of Home
-func Home(home models.Home) HomeMarshal {
+// Home executes the enrichment of Home
+func Home(home models.Home) HomeEnriched {
 	homeID := fmt.Sprintf("%d", home.ID)
 	s3Path := lib.CreateS3PathString(homeID)
 	contents, _ := lib.ListObjects(s3Path)
 	images := lib.S3ToUrls(contents)
 
-	return HomeMarshal{
+	return HomeEnriched{
 		ID:       home.ID,
 		Name:     home.Name,
 		MovedIn:  home.MovedIn,

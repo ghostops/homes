@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/ghostops/home/src/database"
+	"github.com/ghostops/home/src/enrich"
 	"github.com/ghostops/home/src/lib"
-	"github.com/ghostops/home/src/marshal"
 	"github.com/ghostops/home/src/models"
 
 	"github.com/gin-gonic/gin"
@@ -23,14 +23,14 @@ func GetAllHomes(c *gin.Context) {
 		return
 	}
 
-	var marshaledHomes []marshal.HomeMarshal
+	var enrichedHomes []enrich.HomeEnriched
 
 	for _, home := range homes {
-		m := marshal.Home(home)
-		marshaledHomes = append(marshaledHomes, m)
+		e := enrich.Home(home)
+		enrichedHomes = append(enrichedHomes, e)
 	}
 
-	c.JSON(200, marshaledHomes)
+	c.JSON(200, enrichedHomes)
 }
 
 // GetHome gets a home based on ID
@@ -46,9 +46,9 @@ func GetHome(c *gin.Context) {
 
 	var home *models.Home = result.Value.(*models.Home)
 
-	marshaled := marshal.Home(*home)
+	e := enrich.Home(*home)
 
-	c.JSON(200, marshaled)
+	c.JSON(200, e)
 }
 
 // CreateHome creates a new home
@@ -74,9 +74,9 @@ func CreateHome(c *gin.Context) {
 		return
 	}
 
-	marshaled := marshal.Home(*home)
+	e := enrich.Home(*home)
 
-	c.JSON(200, marshaled)
+	c.JSON(200, e)
 }
 
 // UpdateHome updated a home based on ID
@@ -106,9 +106,9 @@ func UpdateHome(c *gin.Context) {
 		Name:     c.PostForm("name"),
 	})
 
-	marshaled := marshal.Home(home)
+	e := enrich.Home(home)
 
-	c.JSON(200, marshaled)
+	c.JSON(200, e)
 }
 
 // DeleteHome deletes a home based on ID
@@ -129,7 +129,7 @@ func DeleteHome(c *gin.Context) {
 	now := time.Now()
 	home.DeletedAt = &now
 
-	marshaled := marshal.Home(home)
+	e := enrich.Home(home)
 
-	c.JSON(200, marshaled)
+	c.JSON(200, e)
 }
