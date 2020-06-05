@@ -14,6 +14,20 @@
                 @change="onHomeNameChange"
             />
         </label>
+
+        <label>
+            Moved in
+            <Datepicker
+                v-model="newHomeMoveIn"
+            />
+        </label>
+
+        <label>
+            Moved out
+            <Datepicker
+                v-model="newHomeMoveOut"
+            />
+        </label>
     </div>
 
     <div
@@ -25,11 +39,17 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
+
 export default {
-    components: {},
+    components: {
+        Datepicker,
+    },
     data() {
         return {
             newHomeName: '',
+            newHomeMoveIn: new Date(),
+            newHomeMoveOut: new Date(),
         };
     },
     computed: {

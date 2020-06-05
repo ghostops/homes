@@ -20,6 +20,8 @@ export interface AppState {
     createNewHome: CreateHomeStage;
     newHomeCoords: LatLng | null;
     newHomeName: string | null;
+    newHomeMovedIn: Date | null;
+    newHomeMovedOut: Date | null;
 }
 
 export default new Vuex.Store<AppState>({
@@ -29,6 +31,8 @@ export default new Vuex.Store<AppState>({
         createNewHome: 'not',
         newHomeCoords: null,
         newHomeName: null,
+        newHomeMovedIn: null,
+        newHomeMovedOut: null,
     },
     mutations: {
         loadHomes: async (state) => {
