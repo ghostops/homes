@@ -22,6 +22,7 @@ export interface AppState {
     newHomeName: string | null;
     newHomeMovedIn: Date | null;
     newHomeMovedOut: Date | null;
+    newHomeErrors: string[];
 }
 
 export default new Vuex.Store<AppState>({
@@ -33,6 +34,7 @@ export default new Vuex.Store<AppState>({
         newHomeName: null,
         newHomeMovedIn: null,
         newHomeMovedOut: null,
+        newHomeErrors: [],
     },
     mutations: {
         loadHomes: async (state) => {
@@ -56,6 +58,9 @@ export default new Vuex.Store<AppState>({
         },
         setNewHomeName: (state, name: string) => {
             state.newHomeName = name;
+        },
+        setNewHomeErrors: (state, errs: string[]) => {
+            state.newHomeErrors = errs;
         },
         addNewHome: async (state) => {
             const home = await API.addHome({

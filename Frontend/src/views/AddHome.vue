@@ -5,6 +5,13 @@
     >
         <h1>Add info about your home</h1>
 
+        <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul>
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+        </p>
+
         <label>
             Home Name
             <input
@@ -28,6 +35,11 @@
                 v-model="newHomeMoveOut"
             />
         </label>
+
+        <input
+            type="submit"
+            value="Submit"
+        />
     </div>
 
     <div
@@ -56,6 +68,9 @@ export default {
         addInfo() {
             return this.$store.state.createNewHome === 'info';
         },
+        errors() {
+            return this.$store.state.newHomeErrors;
+        },
     },
     mounted() {
         if (this.$store.state.createNewHome === 'not') {
@@ -65,6 +80,17 @@ export default {
     methods: {
         onHomeNameChange() {
             this.$store.commit('setNewHomeName', this.newHomeName);
+        },
+        submitForm(e) {
+            const errors = [];
+
+            if (!this.newHomeName) {
+                errors.push('Name required.');
+            }
+
+            this.$store.commit('setNewHomeErrors', errors);
+
+            e.preventDefault();
         },
     },
 };

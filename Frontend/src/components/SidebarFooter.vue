@@ -75,8 +75,11 @@ export default {
                 this.$router.push({ path: 'add' });
                 this.$store.commit('setCreateNewHome', 'info');
             } else if (state === 'info') {
-                this.$store.commit('setCreateNewHome', 'done');
-                this.$store.commit('addNewHome');
+                const f = document.getElementById('newHomeForm');
+
+                console.log(f.submit());
+                // this.$store.commit('setCreateNewHome', 'done');
+                // this.$store.commit('addNewHome');
             }
         },
         confirmNewHome() {
