@@ -46,7 +46,7 @@ export class HSMap extends React.PureComponent<Props> {
     }
 
     onMarkerClick = (marker: IMarker) => {
-        if (!marker.uid) return;
+        if (!marker.uid || this.props.homesStore?.createHomeStatus === 'coords') return;
 
         const clickedHome = this.props.homesStore?.homes.find((h) => h.ID === marker.uid);
 

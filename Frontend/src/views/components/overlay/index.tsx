@@ -31,7 +31,10 @@ export class HSOverlay extends React.PureComponent<Props> {
             >
                 <Button
                     size="huge"
-                    onClick={() => this.props.homesStore?.setCreateHomeStatus('off')}
+                    onClick={() => {
+                        this.props.mapStore?.setMapClickedLngLat(null);
+                        this.props.homesStore?.setCreateHomeStatus('off');
+                    }}
                 >
                     Cancel
                 </Button>

@@ -33,7 +33,13 @@ export class HSHome extends React.PureComponent<Props> {
 
                     {
                         !this.selectingHomeCoords() &&
-                        <Grid.Column width={6}>
+                        <Grid.Column
+                            width={6}
+                            style={{
+                                overflowY: 'auto',
+                                height: '100%',
+                            }}
+                        >
                             <HSSidebar />
                         </Grid.Column>
                     }

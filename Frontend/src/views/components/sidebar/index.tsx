@@ -2,7 +2,8 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { HSMapStore } from '../../../lib/store/map';
-import { Form, Button, Grid, Image } from 'semantic-ui-react';
+import { Form, Button } from 'semantic-ui-react';
+import { HSImages } from '../image/home';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -32,8 +33,6 @@ export class HSSidebar extends React.PureComponent<Props, State> {
 
         if (newHome) {
             this.props.homesStore?.uploadSelectedImages(newHome.ID);
-
-            this.props.mapStore?.setMapClickedLngLat(null);
             this.props.homesStore?.setCreateHomeStatus('success');
 
             if (this.props.homesStore) {
@@ -53,13 +52,33 @@ export class HSSidebar extends React.PureComponent<Props, State> {
     }
 
     renderSelectedHome = () => {
+        const home = this.props.homesStore?.selectedHome as IHome;
+
         return (
             <div>
                 <h1>
-                    {this.props.homesStore?.selectedHome?.Name}
+                    {home.Name}
                 </h1>
 
-                <code><pre>{JSON.stringify(this.props.homesStore?.selectedHome, null, 4)}</pre></code>
+                <div>
+                    <p>
+                        Moved in:
+                    </p>
+                    <p>
+                        {home.MovedIn}
+                    </p>
+                </div>
+
+                <div>
+                    <p>
+                        Moved out:
+                    </p>
+                    <p>
+                        {home.MovedOut}
+                    </p>
+                </div>
+
+                <HSImages sources={home.Images} />
             </div>
         );
     }
@@ -76,6 +95,19 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                 </div>
 
                 <footer className="sidebar-footer">
+                    {
+                        !!this.props.homesStore?.selectedHome &&
+                        <Button
+                            onClick={() => {
+                                if (this.props.homesStore) {
+                                    this.props.homesStore.selectedHome = null;
+                                }
+                            }}
+                        >
+                            Close open Home
+                        </Button>
+                    }
+
                     <Button
                         onClick={this.startCreateHome}
                     >
@@ -168,21 +200,10 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                             }}
                         />
 
-                        <Grid
-                            columns={4}
-                            padded
-                        >
-                            {this.state.previewImages.map((src, index) => {
-                                return (
-                                    <Grid.Column key={index}>
-                                        <Image
-                                            src={src}
-                                            size="medium"
-                                        />
-                                    </Grid.Column>
-                                )
-                            })}
-                        </Grid>
+                        {
+                            !!this.state.previewImages.length &&
+                            <HSImages sources={this.state.previewImages} />
+                        }
                     </Form.Field>
 
                     <Button
@@ -212,7 +233,10 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                 <h1>Your Home has been added!</h1>
 
                 <Button
-                    onClick={() => this.props.homesStore?.setCreateHomeStatus('off')}
+                    onClick={() => {
+                        this.props.homesStore?.setCreateHomeStatus('off');
+                        this.props.mapStore?.setMapClickedLngLat(null);
+                    }}
                     primary
                     size="huge"
                 >

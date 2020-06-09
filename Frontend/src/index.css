@@ -1,3 +1,7 @@
+.mapboxgl-map {
+    transition: width 2s linear;
+}
+
 body,
 #root,
 #root > * {
