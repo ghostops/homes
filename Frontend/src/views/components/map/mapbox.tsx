@@ -9,9 +9,11 @@ interface Props {
     markers?: IMarker[];
     onMapMove?: (state: State) => void;
     onMapClick?: (event: mapboxgl.MapMouseEvent & mapboxgl.EventData, state: State) => void;
+    onMarkerClick?: (marker: IMarker) => void;
 }
 
 export interface IMarker {
+    uid?: string | number;
     lat: number;
     lng: number;
     className?: string;
@@ -112,6 +114,13 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
         const markers = this.props.markers.map((marker) => {
             const el = document.createElement('div');
             el.className = marker.className || 'marker';
+
+
+            el.onclick = () => {
+                if (this.props.onMarkerClick) {
+                    this.props.onMarkerClick(marker);
+                }
+            };
 
             // make a marker for each feature and add to the map
             const mapboxMarker = new mapboxgl.Marker(el)

@@ -2,7 +2,7 @@ interface IHome {
     CreatedAt: string;
     DeletedAt: string;
     ID: number;
-    Images: string;
+    Images: string[];
     Lat: number;
     Lng: number;
     MovedIn: string;

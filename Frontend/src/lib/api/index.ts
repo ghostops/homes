@@ -5,6 +5,8 @@ interface HomeOpts {
     name?: string;
     lat?: number;
     lng?: number;
+    movedIn?: string;
+    movedOut?: string;
 }
 
 export class ApiClient {
@@ -31,8 +33,6 @@ export class ApiClient {
     public createHome = async (opts: HomeOpts): Promise<IHome> => {
         const formData = {
             images: JSON.stringify([]),
-            movedIn: '2020-01-01',
-            movedOut: '2020-01-02',
             ...opts,
         };
 
@@ -61,5 +61,23 @@ export class ApiClient {
         );
 
         return response.data;
+    }
+
+    public uploadImage = async (id: number, image: Blob): Promise<string> => {
+        const formData = new FormData();
+
+        formData.append('file', image);
+
+        const response = await axios.post(
+            `${this.base}/v1/images/home/${id}`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+            },
+        );
+
+        return response.data.Path;
     }
 }

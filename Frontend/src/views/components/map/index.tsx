@@ -20,8 +20,14 @@ export class HSMap extends React.PureComponent<Props> {
 
         let markers: IMarker[] = this.props.homesStore.homes.map((home) => {
             return {
+                uid: home.ID,
                 lat: home.Lat,
                 lng: home.Lng,
+                className: (
+                    this.props.homesStore?.selectedHome?.ID === home.ID
+                    ? 'marker selected'
+                    : 'marker'
+                ),
             };
         });
 
@@ -34,7 +40,19 @@ export class HSMap extends React.PureComponent<Props> {
     }
 
     onMapClick = (event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+        if (this.props.homesStore?.createHomeStatus !== 'coords') return;
+
         this.props.mapStore?.setMapClickedLngLat(event.lngLat);
+    }
+
+    onMarkerClick = (marker: IMarker) => {
+        if (!marker.uid) return;
+
+        const clickedHome = this.props.homesStore?.homes.find((h) => h.ID === marker.uid);
+
+        if (clickedHome && this.props.homesStore) {
+            this.props.homesStore.selectedHome = clickedHome;
+        }
     }
 
     render() {
@@ -47,6 +65,7 @@ export class HSMap extends React.PureComponent<Props> {
                 }}
                 markers={this.markers()}
                 onMapClick={this.onMapClick}
+                onMarkerClick={this.onMarkerClick}
             />
         );
     }

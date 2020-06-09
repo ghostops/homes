@@ -5,6 +5,7 @@ import { HSSidebar } from '../../components/sidebar';
 import { HSMapStore } from '../../../lib/store/map';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { inject, observer } from 'mobx-react';
+import { HSOverlay } from '../../components/overlay';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -24,18 +25,22 @@ export class HSHome extends React.PureComponent<Props> {
 
     render() {
         return (
-            <Grid padded>
-                <Grid.Column width={this.selectingHomeCoords() ? 16 : 10}>
-                    <HSMap />
-                </Grid.Column>
-
-                {
-                    !this.selectingHomeCoords() &&
-                    <Grid.Column width={6}>
-                        <HSSidebar />
+            <>
+                <Grid padded>
+                    <Grid.Column width={this.selectingHomeCoords() ? 16 : 10}>
+                        <HSMap />
                     </Grid.Column>
-                }
-            </Grid>
+
+                    {
+                        !this.selectingHomeCoords() &&
+                        <Grid.Column width={6}>
+                            <HSSidebar />
+                        </Grid.Column>
+                    }
+                </Grid>
+
+                <HSOverlay />
+            </>
         );
     }
 }

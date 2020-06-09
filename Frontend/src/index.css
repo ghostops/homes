@@ -17,3 +17,23 @@ body,
 .marker.dropped {
     background-color: blue;
 }
+
+.marker.selected {
+    background-color: greenyellow;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-content {
+    flex: 1;
+}
+
+.sidebar-footer {
+    background-color: grey;
+    margin: 0 -1rem -1rem -1rem;
+    padding: 1rem;
+}
