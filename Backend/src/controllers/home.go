@@ -23,7 +23,7 @@ func GetAllHomes(c *gin.Context) {
 		return
 	}
 
-	var enrichedHomes []enrich.HomeEnriched
+	enrichedHomes := []enrich.HomeEnriched{}
 
 	for _, home := range homes {
 		e := enrich.Home(home)

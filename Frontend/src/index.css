@@ -13,3 +13,7 @@ body,
     border-radius: 50%;
     cursor: pointer;
 }
+
+.marker.dropped {
+    background-color: blue;
+}

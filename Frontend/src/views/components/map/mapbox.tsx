@@ -1,6 +1,7 @@
 import * as React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { MAPBOX_TOKEN } from './token';
+import ResizeObserver from 'resize-observer-polyfill';
 import _ from 'lodash';
 
 interface Props {
@@ -10,9 +11,10 @@ interface Props {
     onMapClick?: (event: mapboxgl.MapMouseEvent & mapboxgl.EventData, state: State) => void;
 }
 
-interface IMarker {
+export interface IMarker {
     lat: number;
     lng: number;
+    className?: string;
 }
 
 interface State {
@@ -24,7 +26,23 @@ interface State {
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
+const createResizeHandler = (callback: () => void): ResizeObserverCallback => {
+    let count = 0;
+
+    return (e) => {
+        const container = e[0];
+
+        count += 1;
+
+        if (!container || count === 0) return;
+
+        callback();
+    };
+}
+
 export class MapboxGlMap extends React.PureComponent<Props, State> {
+    resizeObserver: ResizeObserver | null = null;
+
     map: mapboxgl.Map = null as any;
 
     mapContainer: HTMLDivElement | null = null;
@@ -63,6 +81,12 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
         });
 
         this.createMarkers();
+
+        this.resizeObserver = new ResizeObserver(
+            createResizeHandler(() => this.map.resize()),
+        );
+
+        this.resizeObserver.observe(this.mapContainer as Element);
     }
 
     componentDidUpdate(prevProps: Props) {
@@ -74,6 +98,9 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
         }
     }
 
+    componentWillUnmount() {
+        this.resizeObserver?.unobserve(this.mapContainer as Element);
+    }
     createMarkers = () => {
         if (!this.props.markers || !this.map) return;
 
@@ -84,7 +111,7 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
 
         const markers = this.props.markers.map((marker) => {
             const el = document.createElement('div');
-            el.className = 'marker';
+            el.className = marker.className || 'marker';
 
             // make a marker for each feature and add to the map
             const mapboxMarker = new mapboxgl.Marker(el)
@@ -99,18 +126,16 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <div>
-                <div
-                    ref={(el) => this.mapContainer = el}
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                    }}
-                />
-            </div>
+            <div
+                ref={(el) => this.mapContainer = el}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                }}
+            />
         );
     }
 }
