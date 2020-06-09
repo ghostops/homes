@@ -35,7 +35,7 @@ export default {
     },
     data() {
         return {
-            accessToken: 'pk.eyJ1IjoiZ2hvc3RvcHMiLCJhIjoiY2theHlmNmowMGF0YzMwbnB2dTl2ODFteSJ9.XCJypMveqZ5gVtMy6VXkaQ',
+            accessToken: '',
             mapStyle: 'mapbox://styles/mapbox/dark-v10',
 
             center: [17.866067, 59.416074],
