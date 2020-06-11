@@ -8,6 +8,7 @@ export interface IHSHomesStore {
     selectedHome: IHome | null;
     createHomeStatus: CreateHomeStatusType;
     createdHome: Partial<IHome>;
+    homesLoaded: boolean;
 }
 
 export const HSHomesStoreDefaults: IHSHomesStore = {
@@ -15,6 +16,7 @@ export const HSHomesStoreDefaults: IHSHomesStore = {
     homes: [],
     createHomeStatus: 'off',
     createdHome: {},
+    homesLoaded: false,
 };
 
 export class HSHomesStore {
@@ -37,6 +39,9 @@ export class HSHomesStore {
 
     @observable
     public createHomeStatus: CreateHomeStatusType = HSHomesStoreDefaults.createHomeStatus;
+
+    @observable
+    public homesLoaded: boolean = HSHomesStoreDefaults.homesLoaded;
 
     @action
     addUploadableImage(img: Blob) {
@@ -62,6 +67,8 @@ export class HSHomesStore {
             const homes = await this.apiClient.getAllHomes();
 
             this.homes = homes;
+
+            this.homesLoaded = true;
         } catch (err) {
             console.error(err);
 

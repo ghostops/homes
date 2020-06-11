@@ -74,6 +74,10 @@ export class HSMap extends React.PureComponent<Props> {
     }
 
     render() {
+        if (!this.props.homesStore?.homesLoaded) {
+            return null;
+        }
+
         return (
             <MapboxGlMap
                 ref={this.bindMapRef}

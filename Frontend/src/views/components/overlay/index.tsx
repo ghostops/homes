@@ -2,7 +2,7 @@ import * as React from 'react';
 import { HSMapStore } from '../../../lib/store/map';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { inject, observer } from 'mobx-react';
-import { Button } from 'semantic-ui-react';
+import { Button, Modal, Icon } from 'semantic-ui-react';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -58,6 +58,28 @@ export class HSOverlay extends React.PureComponent<Props> {
         );
     }
 
+    renderLoading = () => {
+        if (this.props.homesStore?.homesLoaded) {
+            return null;
+        }
+
+        return (
+            <Modal
+                open
+                basic
+            >
+                <Modal.Content style={{ textAlign: 'center' }}>
+                    <Icon
+                        loading
+                        name="spinner"
+                        size="huge"
+                        style={{ color: 'white' }}
+                    />
+                </Modal.Content>
+            </Modal>
+        );
+    }
+
     render() {
         return (
             <div
@@ -71,6 +93,7 @@ export class HSOverlay extends React.PureComponent<Props> {
                 }}
             >
                 {this.renderSelectCoordsOverlay()}
+                {this.renderLoading()}
             </div>
         );
     }
