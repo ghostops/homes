@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { HSMoveDate, formatMoveDate } from './move';
-import { HSImages } from '../image/home';
+import { formatMoveDate } from './move';
 import { List } from 'semantic-ui-react';
 
 interface Props {
