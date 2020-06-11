@@ -85,6 +85,14 @@ export class HSSidebar extends React.PureComponent<Props> {
     render() {
         return (
             <aside className="sidebar">
+                <header style={{
+                    width: '100%',
+                    textAlign: 'center',
+                    padding: '20px 0',
+                }}>
+                    <img src="/Logo.png" alt="HomeApp"/>
+                </header>
+
                 {this.renderSidebarContent()}
             </aside>
         );
