@@ -1,13 +1,25 @@
 import * as React from 'react';
-import { Grid, Image } from 'semantic-ui-react';
+import { Grid, Image, Modal } from 'semantic-ui-react';
 
 interface Props {
     sources: string[];
+    open?: boolean;
 }
 
-export class HSImages extends React.PureComponent<Props> {
+interface State {
+    modalOpen: boolean;
+    selectedImage: string | null;
+}
+
+export class HSImages extends React.PureComponent<Props, State> {
+    state: State = {
+        modalOpen: false,
+        selectedImage: null,
+    };
+
     render() {
         return (
+            <>
             <Grid
                 columns={4}
                 padded
@@ -18,11 +30,45 @@ export class HSImages extends React.PureComponent<Props> {
                             <Image
                                 src={src}
                                 size="medium"
+                                style={{ cursor: this.props.open ? 'pointer' : 'default' }}
+                                onClick={() => {
+                                    if (!this.props.open) return;
+
+                                    this.setState({
+                                        modalOpen: true,
+                                        selectedImage: src,
+                                    });
+                                }}
                             />
                         </Grid.Column>
                     )
                 })}
             </Grid>
+            <Modal
+                open={this.state.modalOpen}
+                centered
+                closeIcon
+                size="mini"
+                onClose={() => {
+                    this.setState({
+                        modalOpen: false,
+                        selectedImage: null,
+                    });
+                }}
+            >
+                <Modal.Content
+                    image
+                >
+                    <Image
+                        src={this.state.selectedImage}
+                        size="large"
+                        onClick={() => {
+                            this.setState({ modalOpen: true });
+                        }}
+                    />
+                </Modal.Content>
+            </Modal>
+            </>
         )
     }
 }

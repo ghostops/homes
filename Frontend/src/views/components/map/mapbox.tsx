@@ -17,6 +17,7 @@ export interface IMarker {
     lat: number;
     lng: number;
     className?: string;
+    label?: string;
 }
 
 interface State {
@@ -103,6 +104,7 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
     componentWillUnmount() {
         this.resizeObserver?.unobserve(this.mapContainer as Element);
     }
+
     createMarkers = () => {
         if (!this.props.markers || !this.map) return;
 
@@ -115,6 +117,9 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
             const el = document.createElement('div');
             el.className = marker.className || 'marker';
 
+            if (marker.label) {
+                el.innerHTML = marker.label;
+            }
 
             el.onclick = () => {
                 if (this.props.onMarkerClick) {

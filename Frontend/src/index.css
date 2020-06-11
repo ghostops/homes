@@ -1,7 +1,3 @@
-.mapboxgl-map {
-    transition: width 2s linear;
-}
-
 body,
 #root,
 #root > * {
@@ -9,21 +5,31 @@ body,
 }
 
 .marker {
-    /*background-image: url('mapbox-icon.png');*/
-    background-color: red;
-    background-size: cover;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    text-align: center;
+    width: 55px;
+    height: 70px;
     cursor: pointer;
 }
 
-.marker.dropped {
-    background-color: blue;
+.marker p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: white;
+    padding: 3px;
+    font-size: 10px;
+    text-align: center;
 }
 
-.marker.selected {
-    background-color: greenyellow;
+/* .marker.dropped {
+} */
+
+.marker.selected p {
+    background-color: #55E6C1;
 }
 
 .sidebar {

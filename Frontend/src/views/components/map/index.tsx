@@ -3,6 +3,7 @@ import { MapboxGlMap, IMarker } from './mapbox';
 import { inject, observer } from 'mobx-react';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { HSMapStore } from '../../../lib/store/map';
+import { MapMarkerSVG } from '../svg/mapMarker';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -19,12 +20,17 @@ export class HSMap extends React.PureComponent<Props> {
         }
 
         let markers: IMarker[] = this.props.homesStore.homes.map((home) => {
+            const selected = this.props.homesStore?.selectedHome?.ID === home.ID;
             return {
                 uid: home.ID,
                 lat: home.Lat,
                 lng: home.Lng,
+                label: `
+                    ${MapMarkerSVG({ height: 60, width: 50, fill: selected ? '#55E6C1' : 'white' })}
+                    <p>${home.Name}</p>
+                `,
                 className: (
-                    this.props.homesStore?.selectedHome?.ID === home.ID
+                    selected
                     ? 'marker selected'
                     : 'marker'
                 ),
@@ -33,7 +39,12 @@ export class HSMap extends React.PureComponent<Props> {
 
         if (this.props.mapStore?.clickedLngLat) {
             const { lng, lat } = this.props.mapStore.clickedLngLat;
-            markers = markers.concat({ lat, lng, className: 'marker dropped' });
+            markers = markers.concat({
+                lat,
+                lng,
+                className: 'marker dropped',
+                label: MapMarkerSVG({ height: 60, width: 50, fill: 'white' })
+            });
         }
 
         return markers;

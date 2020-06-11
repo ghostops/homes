@@ -47,6 +47,11 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                 <h1>
                     Your Homes
                 </h1>
+
+                <p>
+                    Map marker icon:<br />
+                    Created by Venkatesh Aiyulu from the Noun Project
+                </p>
             </div>
         );
     }
@@ -78,7 +83,10 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                     </p>
                 </div>
 
-                <HSImages sources={home.Images} />
+                <HSImages
+                    sources={home.Images}
+                    open
+                />
             </div>
         );
     }
