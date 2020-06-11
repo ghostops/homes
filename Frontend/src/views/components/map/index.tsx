@@ -14,6 +14,8 @@ interface Props {
 @inject('homesStore')
 @observer
 export class HSMap extends React.PureComponent<Props> {
+    map: MapboxGlMap | null = null;
+
     markers = (): IMarker[] => {
         if (!this.props.homesStore) {
             return [];
@@ -66,9 +68,15 @@ export class HSMap extends React.PureComponent<Props> {
         }
     }
 
+    bindMapRef = (map: MapboxGlMap) => {
+        this.map = map;
+        this.props.mapStore?.bindMapRef(map.map);
+    }
+
     render() {
         return (
             <MapboxGlMap
+                ref={this.bindMapRef}
                 initialState={{
                     lng: 17.866067,
                     lat: 59.416074,

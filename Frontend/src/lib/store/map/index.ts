@@ -9,11 +9,18 @@ export const HSMapStoreDefaults: IHSMapStore = {
 };
 
 export class HSMapStore {
+    public map: mapboxgl.Map | null = null;
+
     @observable
     public clickedLngLat: mapboxgl.LngLat | null = HSMapStoreDefaults.clickedLngLat;
 
     @action
     async setMapClickedLngLat(lngLat: mapboxgl.LngLat | null) {
         this.clickedLngLat = lngLat;
+    }
+
+    @action
+    async bindMapRef(map: mapboxgl.Map) {
+        this.map = map;
     }
 }

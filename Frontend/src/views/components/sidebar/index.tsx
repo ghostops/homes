@@ -2,8 +2,9 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { HSMapStore } from '../../../lib/store/map';
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, List } from 'semantic-ui-react';
 import { HSImages } from '../image/home';
+import { HSMoveDate, formatMoveDate } from '../home/move';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -34,9 +35,11 @@ export class HSSidebar extends React.PureComponent<Props, State> {
         if (newHome) {
             this.props.homesStore?.uploadSelectedImages(newHome.ID);
             this.props.homesStore?.setCreateHomeStatus('success');
+            this.props.mapStore?.setMapClickedLngLat(null);
 
             if (this.props.homesStore) {
                 this.props.homesStore.createdHome = {};
+                this.props.homesStore.selectedHome = newHome;
             }
         }
     }
@@ -48,6 +51,47 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                     Your Homes
                 </h1>
 
+                <List
+                    divided
+                    relaxed
+                >
+                    {this.props.homesStore?.homes.map((home: IHome) => {
+                        return (
+                            <List.Item>
+                                <List.Icon
+                                    name='home'
+                                    size='large'
+                                    verticalAlign='middle'
+                                />
+                                <List.Content>
+                                    <List.Header
+                                        as='a'
+                                        onClick={() => {
+                                            if (this.props.homesStore) {
+                                                this.props.homesStore.selectedHome = home;
+                                            }
+
+                                            this.props.mapStore?.map?.flyTo({
+                                                animate: true,
+                                                center: {
+                                                    lat: home.Lat,
+                                                    lng: home.Lng,
+                                                },
+                                                zoom: 14,
+                                            });
+                                        }}
+                                    >
+                                        {home.Name}
+                                    </List.Header>
+
+                                    <List.Description>
+                                        {formatMoveDate(new Date(home.MovedIn))} - {formatMoveDate(new Date(home.MovedOut))}
+                                    </List.Description>
+                                </List.Content>
+                            </List.Item>
+                        )
+                    })}
+                </List>
                 <p>
                     Map marker icon:<br />
                     Created by Venkatesh Aiyulu from the Noun Project
@@ -65,23 +109,15 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                     {home.Name}
                 </h1>
 
-                <div>
-                    <p>
-                        Moved in:
-                    </p>
-                    <p>
-                        {home.MovedIn}
-                    </p>
-                </div>
+                <HSMoveDate
+                    label="Moved in:"
+                    date={new Date(home.MovedIn)}
+                />
 
-                <div>
-                    <p>
-                        Moved out:
-                    </p>
-                    <p>
-                        {home.MovedOut}
-                    </p>
-                </div>
+                <HSMoveDate
+                    label="Moved out:"
+                    date={new Date(home.MovedOut)}
+                />
 
                 <HSImages
                     sources={home.Images}
@@ -121,6 +157,24 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                     >
                         Add new Home
                     </Button>
+
+                    {
+                        !!this.props.homesStore?.selectedHome &&
+                        <Button
+                            onClick={() => {
+                                if (this.props.homesStore) {
+                                    const id = this.props.homesStore.selectedHome?.ID;
+
+                                    if (id) {
+                                        this.props.homesStore.deleteHome(id);
+                                    }
+                                }
+                            }}
+                            color="red"
+                        >
+                            Delete Home
+                        </Button>
+                    }
                 </footer>
             </>
         );
@@ -243,7 +297,6 @@ export class HSSidebar extends React.PureComponent<Props, State> {
                 <Button
                     onClick={() => {
                         this.props.homesStore?.setCreateHomeStatus('off');
-                        this.props.mapStore?.setMapClickedLngLat(null);
                     }}
                     primary
                     size="huge"

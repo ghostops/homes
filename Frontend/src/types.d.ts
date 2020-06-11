@@ -1,6 +1,4 @@
 interface IHome {
-    CreatedAt: string;
-    DeletedAt: string;
     ID: number;
     Images: string[];
     Lat: number;
@@ -8,5 +6,4 @@ interface IHome {
     MovedIn: string;
     MovedOut: string;
     Name: string;
-    UpdatedAt: string;
 }

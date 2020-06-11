@@ -110,4 +110,18 @@ export class HSHomesStore {
 
         this.uploadableImages = [];
     }
+
+    @action
+    async deleteHome(homeId: number): Promise<void> {
+        const homeIndex = this.homes.findIndex((h) => h.ID === homeId);
+        const home = this.homes[homeIndex];
+
+        const deleteHome = window.confirm(`Delete ${home.Name} forever?`);
+
+        if (deleteHome) {
+            await this.apiClient.deleteHome(homeId);
+            this.selectedHome = null;
+            this.homes.splice(homeIndex, 1);
+        }
+    }
 }
