@@ -20,11 +20,15 @@ type HomeEnriched struct {
 }
 
 // Home executes the enrichment of Home
-func Home(home models.Home) HomeEnriched {
-	homeID := fmt.Sprintf("%d", home.ID)
-	s3Path := lib.CreateS3PathString(homeID)
-	contents, _ := lib.ListObjects(s3Path)
-	images := lib.S3ToUrls(contents)
+func Home(home models.Home, includeImages bool) HomeEnriched {
+	images := []string{}
+
+	if includeImages {
+		homeID := fmt.Sprintf("%d", home.ID)
+		s3Path := lib.CreateS3PathString(homeID)
+		contents, _ := lib.ListObjects(s3Path)
+		images = lib.S3ToUrls(contents)
+	}
 
 	return HomeEnriched{
 		ID:       home.ID,

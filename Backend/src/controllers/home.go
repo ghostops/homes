@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 
@@ -26,7 +27,7 @@ func GetAllHomes(c *gin.Context) {
 	enrichedHomes := []enrich.HomeEnriched{}
 
 	for _, home := range homes {
-		e := enrich.Home(home)
+		e := enrich.Home(home, false)
 		enrichedHomes = append(enrichedHomes, e)
 	}
 
@@ -46,7 +47,7 @@ func GetHome(c *gin.Context) {
 
 	var home *models.Home = result.Value.(*models.Home)
 
-	e := enrich.Home(*home)
+	e := enrich.Home(*home, true)
 
 	c.JSON(200, e)
 }
@@ -74,7 +75,7 @@ func CreateHome(c *gin.Context) {
 		return
 	}
 
-	e := enrich.Home(*home)
+	e := enrich.Home(*home, true)
 
 	c.JSON(200, e)
 }
@@ -106,7 +107,7 @@ func UpdateHome(c *gin.Context) {
 		Name:     c.PostForm("name"),
 	})
 
-	e := enrich.Home(home)
+	e := enrich.Home(home, true)
 
 	c.JSON(200, e)
 }
@@ -129,7 +130,14 @@ func DeleteHome(c *gin.Context) {
 	now := time.Now()
 	home.DeletedAt = &now
 
-	e := enrich.Home(home)
+	// Delete the images
+	s3Path := lib.CreateS3PathString(fmt.Sprint(home.ID))
+	contents, _ := lib.ListObjects(s3Path)
+	for _, object := range contents.Contents {
+		lib.DeleteObject(*object.Key)
+	}
+
+	e := enrich.Home(home, false)
 
 	c.JSON(200, e)
 }

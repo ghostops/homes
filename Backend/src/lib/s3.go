@@ -46,6 +46,20 @@ func ListObjects(key string) (*s3.ListObjectsOutput, error) {
 	return result, err
 }
 
+// DeleteObject deletes a specified key
+func DeleteObject(key string) (*s3.DeleteObjectOutput, error) {
+	svc := s3.New(AwsSession)
+
+	input := &s3.DeleteObjectInput{
+		Bucket: aws.String(os.Getenv("S3_BUCKET_NAME")),
+		Key:    aws.String(key),
+	}
+
+	result, err := svc.DeleteObject(input)
+
+	return result, err
+}
+
 // UploadImageToS3 uploads a single image to S3
 func UploadImageToS3(header *multipart.FileHeader, homeID string) (*s3.PutObjectInput, error) {
 	file, err := header.Open()
