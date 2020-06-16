@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { HSMapStore } from '../../../lib/store/map';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { HSHomeList } from '../home/list';
+import { Message } from 'semantic-ui-react';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -15,7 +16,9 @@ interface Props {
 export class HSSidebarHomeList extends React.PureComponent<Props> {
     render() {
         return (
-            <div>
+            <div style={{
+                paddingBottom: 15,
+            }}>
                 <h1>
                     Your Homes
                 </h1>
@@ -41,10 +44,12 @@ export class HSSidebarHomeList extends React.PureComponent<Props> {
                     />
                 }
 
-                <p>
-                    Map marker icon:<br />
-                    Created by Venkatesh Aiyulu from the Noun Project
-                </p>
+                <Message>
+                    <Message.Header>Map marker icon:</Message.Header>
+                    <p>
+                        Created by Venkatesh Aiyulu from the Noun Project
+                    </p>
+                </Message>
             </div>
         );
     }

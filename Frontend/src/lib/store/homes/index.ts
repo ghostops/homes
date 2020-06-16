@@ -9,6 +9,7 @@ export interface IHSHomesStore {
     createHomeStatus: CreateHomeStatusType;
     createdHome: Partial<IHome>;
     homesLoaded: boolean;
+    errors: any[];
 }
 
 export const HSHomesStoreDefaults: IHSHomesStore = {
@@ -17,6 +18,7 @@ export const HSHomesStoreDefaults: IHSHomesStore = {
     createHomeStatus: 'off',
     createdHome: {},
     homesLoaded: false,
+    errors: [],
 };
 
 export class HSHomesStore {
@@ -43,6 +45,9 @@ export class HSHomesStore {
     @observable
     public homesLoaded: boolean = HSHomesStoreDefaults.homesLoaded;
 
+    @observable
+    public errors: any[] = HSHomesStoreDefaults.errors;
+
     @action
     addUploadableImage(img: Blob) {
         this.uploadableImages = this.uploadableImages.concat(img);
@@ -63,6 +68,8 @@ export class HSHomesStore {
 
     @action
     async loadAllHomes() {
+        this.errors = [];
+
         try {
             const homes = await this.apiClient.getAllHomes();
 
@@ -71,6 +78,8 @@ export class HSHomesStore {
             this.homesLoaded = true;
         } catch (err) {
             console.error(err);
+
+            this.errors.push(err);
 
             this.homes = [];
         }
@@ -120,15 +129,16 @@ export class HSHomesStore {
 
     @action
     async deleteHome(homeId: number): Promise<void> {
-        const homeIndex = this.homes.findIndex((h) => h.ID === homeId);
-        const home = this.homes[homeIndex];
+        const home = this.homes.find((h) => h.ID === homeId);
+
+        if (!home) return;
 
         const deleteHome = window.confirm(`Delete ${home.Name} forever?`);
 
         if (deleteHome) {
-            await this.apiClient.deleteHome(homeId);
             this.selectedHome = null;
-            this.homes.splice(homeIndex, 1);
+            this.homes = this.homes.filter((h) => h.ID !== home.ID);
+            await this.apiClient.deleteHome(homeId);
         }
     }
 }

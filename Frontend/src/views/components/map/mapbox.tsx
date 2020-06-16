@@ -10,6 +10,7 @@ interface Props {
     onMapMove?: (state: State) => void;
     onMapClick?: (event: mapboxgl.MapMouseEvent & mapboxgl.EventData, state: State) => void;
     onMarkerClick?: (marker: IMarker) => void;
+    fitToInitialMarkers?: boolean;
 }
 
 export interface IMarker {
@@ -25,6 +26,7 @@ interface State {
     lat: number;
     zoom: number;
     markers: mapboxgl.Marker[];
+    hasFitToInitialMarkers: boolean;
 }
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -55,6 +57,7 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
         lat: 0,
         zoom: 10,
         markers: [],
+        hasFitToInitialMarkers: false,
     } as State);
 
     componentDidMount() {
@@ -136,6 +139,25 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
         });
 
         this.setState({ markers });
+
+        if (
+            this.props.fitToInitialMarkers &&
+            !this.state.hasFitToInitialMarkers &&
+            this.props.markers
+        ) {
+            this.setState({ hasFitToInitialMarkers: true });
+
+            const bounds = new mapboxgl.LngLatBounds();
+
+            this.props.markers.forEach((marker) => {
+                bounds.extend([marker.lng, marker.lat]);
+            });
+
+            this.map.fitBounds(bounds, {
+                animate: false,
+                padding: 100,
+            });
+        }
     }
 
     render() {

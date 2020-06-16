@@ -59,7 +59,7 @@ export class HSOverlay extends React.PureComponent<Props> {
     }
 
     renderLoading = () => {
-        if (this.props.homesStore?.homesLoaded) {
+        if (this.props.homesStore?.homesLoaded || !!this.props.homesStore?.errors.length) {
             return null;
         }
 
@@ -80,6 +80,41 @@ export class HSOverlay extends React.PureComponent<Props> {
         );
     }
 
+    renderError = () => {
+        if (!this.props.homesStore?.errors.length) {
+            return null;
+        }
+
+        return (
+            <Modal
+                open
+                size="mini"
+                closeIcon
+                onClose={() => {
+                    // Clear the errors to close the modal
+                    if (this.props.homesStore) {
+                        this.props.homesStore.errors = [];
+                    }
+                }}
+            >
+                <Modal.Header>
+                    Error
+                </Modal.Header>
+                <Modal.Content style={{ textAlign: 'center' }}>
+                    <Modal.Description>
+                        {this.props.homesStore.errors.map((err) => {
+                            return (
+                                <p>
+                                    {!!err.message ? err.message : String(err)}
+                                </p>
+                            );
+                        })}
+                    </Modal.Description>
+                </Modal.Content>
+            </Modal>
+        );
+    }
+
     render() {
         return (
             <div
@@ -94,6 +129,7 @@ export class HSOverlay extends React.PureComponent<Props> {
             >
                 {this.renderSelectCoordsOverlay()}
                 {this.renderLoading()}
+                {this.renderError()}
             </div>
         );
     }

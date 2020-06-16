@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { formatMoveDate } from './move';
-import { List } from 'semantic-ui-react';
+import { List, Placeholder } from 'semantic-ui-react';
+import _ from 'lodash';
 
 interface Props {
     homes: IHome[];
@@ -8,6 +9,14 @@ interface Props {
 }
 
 export const HSHomeList: React.SFC<Props> = ({ homes, onHomeClick }) => {
+    if (!homes || !homes.length) {
+        return (
+            <Placeholder>
+                {_.range(15).map(() => <Placeholder.Line />)}
+            </Placeholder>
+        )
+    }
+
     return (
         <List
             divided
@@ -15,7 +24,7 @@ export const HSHomeList: React.SFC<Props> = ({ homes, onHomeClick }) => {
         >
             {homes.map((home: IHome) => {
                 return (
-                    <List.Item>
+                    <List.Item key={home.ID}>
                         <List.Icon
                             name='home'
                             size='large'

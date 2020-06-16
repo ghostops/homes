@@ -82,13 +82,11 @@ export class HSMap extends React.PureComponent<Props> {
             <MapboxGlMap
                 ref={this.bindMapRef}
                 initialState={{
-                    lng: 17.866067,
-                    lat: 59.416074,
-                    zoom: 14,
                 }}
                 markers={this.markers()}
                 onMapClick={this.onMapClick}
                 onMarkerClick={this.onMarkerClick}
+                fitToInitialMarkers
             />
         );
     }
