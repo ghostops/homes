@@ -33,7 +33,7 @@ export class HSSidebar extends React.PureComponent<Props> {
                         <Button
                             onClick={() => {
                                 if (this.props.homesStore) {
-                                    this.props.homesStore.selectedHome = null;
+                                    this.props.homesStore.setSelectedHome(null);
                                 }
                             }}
                         >

@@ -29,7 +29,7 @@ export class HSSidebarHomeList extends React.PureComponent<Props> {
                         homes={this.props.homesStore.homes}
                         onHomeClick={(home) => {
                             if (this.props.homesStore) {
-                                this.props.homesStore.selectedHome = home;
+                                this.props.homesStore.setSelectedHome(home);
                             }
 
                             this.props.mapStore?.map?.flyTo({

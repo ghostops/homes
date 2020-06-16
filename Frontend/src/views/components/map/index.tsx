@@ -64,7 +64,7 @@ export class HSMap extends React.PureComponent<Props> {
         const clickedHome = this.props.homesStore?.homes.find((h) => h.ID === marker.uid);
 
         if (clickedHome && this.props.homesStore) {
-            this.props.homesStore.selectedHome = clickedHome;
+            this.props.homesStore.setSelectedHome(clickedHome);
         }
     }
 

@@ -30,7 +30,7 @@ export class HSHomeCreator extends React.PureComponent<Props, State> {
 
             if (this.props.homesStore) {
                 this.props.homesStore.createdHome = {};
-                this.props.homesStore.selectedHome = newHome;
+                this.props.homesStore.setSelectedHome(newHome);
             }
         }
     }

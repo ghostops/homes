@@ -30,6 +30,8 @@ export class HSHomesStore {
 
     private uploadableImages: Blob[] = [];
 
+    private enrichedIds: number[] = [];
+
     @observable
     public homes: IHome[] = HSHomesStoreDefaults.homes;
 
@@ -47,6 +49,24 @@ export class HSHomesStore {
 
     @observable
     public errors: any[] = HSHomesStoreDefaults.errors;
+
+    @action async setSelectedHome(home: IHome | null) {
+        this.selectedHome = home;
+
+        if (home && !this.enrichedIds.includes(home.ID)) {
+            const enrichedHome = await this.apiClient.getHome(home.ID);
+
+            // A race condition could happen when waiting for the enriched home
+            if (this.selectedHome && this.selectedHome.ID === enrichedHome.ID) {
+                // Store the enriched value in our array of homes to cache it
+                this.enrichedIds.push(enrichedHome.ID);
+                this.selectedHome = enrichedHome;
+
+                const index = this.homes.findIndex((h) => enrichedHome.ID === h.ID);
+                this.homes[index] = enrichedHome;
+            }
+        }
+    }
 
     @action
     addUploadableImage(img: Blob) {
@@ -136,7 +156,7 @@ export class HSHomesStore {
         const deleteHome = window.confirm(`Delete ${home.Name} forever?`);
 
         if (deleteHome) {
-            this.selectedHome = null;
+            this.setSelectedHome(null);
             this.homes = this.homes.filter((h) => h.ID !== home.ID);
             await this.apiClient.deleteHome(homeId);
         }
