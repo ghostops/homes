@@ -18,6 +18,10 @@ interface State {
 @inject('mapStore')
 @observer
 export class HSHomeCreator extends React.PureComponent<Props, State> {
+    state: State = {
+        previewImages: [],
+    }
+
     submitCreateHomeInfo = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 

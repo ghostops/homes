@@ -17,7 +17,7 @@ export class HSMap extends React.PureComponent<Props> {
     map: MapboxGlMap | null = null;
 
     markers = (): IMarker[] => {
-        if (!this.props.homesStore) {
+        if (!this.props.homesStore || !this.props.homesStore.homes) {
             return [];
         }
 
@@ -61,7 +61,7 @@ export class HSMap extends React.PureComponent<Props> {
     onMarkerClick = (marker: IMarker) => {
         if (!marker.uid || this.props.homesStore?.createHomeStatus === 'coords') return;
 
-        const clickedHome = this.props.homesStore?.homes.find((h) => h.ID === marker.uid);
+        const clickedHome = (this.props.homesStore?.homes as IHome[]).find((h) => h.ID === marker.uid);
 
         if (clickedHome && this.props.homesStore) {
             this.props.homesStore.setSelectedHome(clickedHome);
@@ -69,6 +69,7 @@ export class HSMap extends React.PureComponent<Props> {
     }
 
     bindMapRef = (map: MapboxGlMap) => {
+        if (!map) return;
         this.map = map;
         this.props.mapStore?.bindMapRef(map.map);
     }

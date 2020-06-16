@@ -4,7 +4,7 @@ import { ApiClient } from '../../api';
 type CreateHomeStatusType = 'off' | 'coords' | 'info' | 'success';
 
 export interface IHSHomesStore {
-    homes: IHome[];
+    homes: IHome[] | null;
     selectedHome: IHome | null;
     createHomeStatus: CreateHomeStatusType;
     createdHome: Partial<IHome>;
@@ -14,7 +14,7 @@ export interface IHSHomesStore {
 
 export const HSHomesStoreDefaults: IHSHomesStore = {
     selectedHome: null,
-    homes: [],
+    homes: null,
     createHomeStatus: 'off',
     createdHome: {},
     homesLoaded: false,
@@ -33,7 +33,7 @@ export class HSHomesStore {
     private enrichedIds: number[] = [];
 
     @observable
-    public homes: IHome[] = HSHomesStoreDefaults.homes;
+    public homes: IHome[] | null = HSHomesStoreDefaults.homes;
 
     @observable
     public selectedHome: IHome | null = HSHomesStoreDefaults.selectedHome;
@@ -62,8 +62,8 @@ export class HSHomesStore {
                 this.enrichedIds.push(enrichedHome.ID);
                 this.selectedHome = enrichedHome;
 
-                const index = this.homes.findIndex((h) => enrichedHome.ID === h.ID);
-                this.homes[index] = enrichedHome;
+                const index = (this.homes as IHome[]).findIndex((h) => enrichedHome.ID === h.ID);
+                (this.homes as IHome[])[index] = enrichedHome;
             }
         }
     }
@@ -115,7 +115,9 @@ export class HSHomesStore {
             movedOut: home.MovedOut,
         });
 
-        this.homes = this.homes.concat(newHome);
+        if (this.homes) {
+            this.homes = this.homes.concat(newHome);
+        }
 
         return newHome;
     }
@@ -138,6 +140,8 @@ export class HSHomesStore {
             console.error(errors);
         }
 
+        if (!this.homes) return;
+
         const index = this.homes.findIndex((h) => h.ID === homeId);
         this.homes[index] = {
             ...this.homes[index],
@@ -149,6 +153,8 @@ export class HSHomesStore {
 
     @action
     async deleteHome(homeId: number): Promise<void> {
+        if (!this.homes) return;
+
         const home = this.homes.find((h) => h.ID === homeId);
 
         if (!home) return;

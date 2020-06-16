@@ -102,9 +102,9 @@ export class HSOverlay extends React.PureComponent<Props> {
                 </Modal.Header>
                 <Modal.Content style={{ textAlign: 'center' }}>
                     <Modal.Description>
-                        {this.props.homesStore.errors.map((err) => {
+                        {this.props.homesStore.errors.map((err, index) => {
                             return (
-                                <p>
+                                <p key={index}>
                                     {!!err.message ? err.message : String(err)}
                                 </p>
                             );

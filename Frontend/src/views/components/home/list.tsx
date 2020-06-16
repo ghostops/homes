@@ -9,10 +9,10 @@ interface Props {
 }
 
 export const HSHomeList: React.SFC<Props> = ({ homes, onHomeClick }) => {
-    if (!homes || !homes.length) {
+    if (!homes) {
         return (
             <Placeholder>
-                {_.range(15).map(() => <Placeholder.Line />)}
+                {_.range(15).map((i) => <Placeholder.Line key={i} />)}
             </Placeholder>
         )
     }

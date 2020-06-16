@@ -1,6 +1,5 @@
 import * as React from 'react';
 import mapboxgl from 'mapbox-gl';
-import { MAPBOX_TOKEN } from './token';
 import ResizeObserver from 'resize-observer-polyfill';
 import _ from 'lodash';
 
@@ -29,7 +28,7 @@ interface State {
     hasFitToInitialMarkers: boolean;
 }
 
-mapboxgl.accessToken = MAPBOX_TOKEN;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN as string;
 
 const createResizeHandler = (callback: () => void): ResizeObserverCallback => {
     let count = 0;
@@ -55,7 +54,7 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
     state: State = _.defaults(this.props.initialState, {
         lng: 0,
         lat: 0,
-        zoom: 10,
+        zoom: 1,
         markers: [],
         hasFitToInitialMarkers: false,
     } as State);
@@ -140,12 +139,18 @@ export class MapboxGlMap extends React.PureComponent<Props, State> {
 
         this.setState({ markers });
 
+        this.centerOnMarkers();
+    }
+
+    centerOnMarkers = () => {
         if (
             this.props.fitToInitialMarkers &&
             !this.state.hasFitToInitialMarkers &&
             this.props.markers
         ) {
             this.setState({ hasFitToInitialMarkers: true });
+
+            if (!this.props.markers.length) return;
 
             const bounds = new mapboxgl.LngLatBounds();
 

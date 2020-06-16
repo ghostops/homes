@@ -26,7 +26,7 @@ export class HSSidebarHomeList extends React.PureComponent<Props> {
                 {
                     this.props.homesStore &&
                     <HSHomeList
-                        homes={this.props.homesStore.homes}
+                        homes={this.props.homesStore.homes as IHome[]}
                         onHomeClick={(home) => {
                             if (this.props.homesStore) {
                                 this.props.homesStore.setSelectedHome(home);
