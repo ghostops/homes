@@ -1,3 +1,5 @@
+#!/bin/bash
+
 HOMEAPP_PORT=4001
 HOMEAPP_NAME=homeapp
 
