@@ -16,7 +16,7 @@ func CreateURLMappings() {
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"*"}
 
-	Router.Use(cors.New(config))
+	// Router.Use(cors.New(config))
 
 	// v1 of the API
 	v1 := Router.Group("/v1")

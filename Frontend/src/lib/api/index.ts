@@ -12,7 +12,11 @@ interface HomeOpts {
 export class ApiClient {
     constructor(private base: string) {}
 
-    private client = axios.create();
+    private client = axios.create({
+        headers: {
+            'Authorization': 'Basic Z2hvc3Q6dG9vcg==',
+        },
+    });
 
     public getAllHomes = async (): Promise<IHome[]> => {
         const response = await this.client.get(`${this.base}/v1/homes`);
