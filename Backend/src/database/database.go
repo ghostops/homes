@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/ghostops/home/src/models"
 
@@ -30,7 +31,10 @@ func ConnectDb() {
 
 	if err != nil {
 		log.Println(err)
-		log.Fatal(connection)
+		log.Println("Retrying in 30 seconds")
+		time.Sleep(time.Second * 30)
+		ConnectDb()
+		return
 	}
 
 	// Migrate the schema

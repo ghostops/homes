@@ -1,5 +1,7 @@
 import axios from 'axios';
 import qs from 'querystring';
+import { HSAuthStore } from '../store/auth';
+import { Auth0Client } from '@auth0/auth0-spa-js';
 
 interface HomeOpts {
     name?: string;
@@ -12,20 +14,27 @@ interface HomeOpts {
 export class ApiClient {
     constructor(private base: string) {}
 
+    private auth0Client: Auth0Client | null = null;
+    private client = axios.create();
+
+    public setAuth0Client = (client: Auth0Client) => {
+        this.auth0Client = client;
+    }
+
     public getAllHomes = async (): Promise<IHome[]> => {
-        const response = await axios.get(`${this.base}/v1/homes`);
+        const response = await this.client.get(`${this.base}/v1/homes`);
 
         return response.data;
     }
 
     public getHome = async (id: number): Promise<IHome> => {
-        const response = await axios.get(`${this.base}/v1/homes/${id}`);
+        const response = await this.client.get(`${this.base}/v1/homes/${id}`);
 
         return response.data;
     }
 
     public deleteHome = async (id: number): Promise<IHome> => {
-        const response = await axios.delete(`${this.base}/v1/homes/${id}`);
+        const response = await this.client.delete(`${this.base}/v1/homes/${id}`);
 
         return response.data;
     }
@@ -36,7 +45,7 @@ export class ApiClient {
             ...opts,
         };
 
-        const response = await axios.post(
+        const response = await this.client.post(
             `${this.base}/v1/homes`,
             qs.stringify(formData),
             {
@@ -50,7 +59,7 @@ export class ApiClient {
     }
 
     public updateHome = async (id: number, opts: Partial<HomeOpts>): Promise<IHome> => {
-        const response = await axios.put(
+        const response = await this.client.put(
             `${this.base}/v1/homes/${id}`,
             qs.stringify(opts),
             {
@@ -68,7 +77,7 @@ export class ApiClient {
 
         formData.append('file', image);
 
-        const response = await axios.post(
+        const response = await this.client.post(
             `${this.base}/v1/images/home/${id}`,
             formData,
             {

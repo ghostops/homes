@@ -2,7 +2,8 @@ import * as React from 'react';
 import { HSMapStore } from '../../../lib/store/map';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { inject, observer } from 'mobx-react';
-import { Button, Modal, Icon } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
+import { HSLoadingOverlay } from '../loading/overlay';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -63,21 +64,7 @@ export class HSOverlay extends React.PureComponent<Props> {
             return null;
         }
 
-        return (
-            <Modal
-                open
-                basic
-            >
-                <Modal.Content style={{ textAlign: 'center' }}>
-                    <Icon
-                        loading
-                        name="spinner"
-                        size="huge"
-                        style={{ color: 'white' }}
-                    />
-                </Modal.Content>
-            </Modal>
-        );
+        return (<HSLoadingOverlay />);
     }
 
     renderError = () => {

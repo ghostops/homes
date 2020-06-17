@@ -3,3 +3,4 @@ Backend/.env
 *.tmp
 .env.production
 Frontend/src/views/components/map/token.ts
+Frontend/.env
