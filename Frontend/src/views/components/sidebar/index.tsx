@@ -6,7 +6,6 @@ import { HSHomesStore } from '../../../lib/store/homes';
 import { HSHomeSuccess } from '../home/success';
 import { HSSidebarHomeList } from './list';
 import { inject, observer } from 'mobx-react';
-import { HSLogout } from './logout';
 
 interface Props {
     homesStore?: HSHomesStore;
@@ -67,8 +66,6 @@ export class HSSidebar extends React.PureComponent<Props> {
                             Delete Home
                         </Button>
                     }
-
-                    <HSLogout />
                 </footer>
             </>
         );

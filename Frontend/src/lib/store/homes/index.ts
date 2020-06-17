@@ -22,7 +22,11 @@ export const HSHomesStoreDefaults: IHSHomesStore = {
 };
 
 export class HSHomesStore {
-    constructor(private apiClient: ApiClient) {
+    private apiClient: ApiClient = new ApiClient(
+        process.env.REACT_APP_API_ROOT as string,
+    );
+
+    constructor() {
         this.loadAllHomes();
     }
 

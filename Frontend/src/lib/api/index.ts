@@ -1,7 +1,5 @@
 import axios from 'axios';
 import qs from 'querystring';
-import { HSAuthStore } from '../store/auth';
-import { Auth0Client } from '@auth0/auth0-spa-js';
 
 interface HomeOpts {
     name?: string;
@@ -14,12 +12,7 @@ interface HomeOpts {
 export class ApiClient {
     constructor(private base: string) {}
 
-    private auth0Client: Auth0Client | null = null;
     private client = axios.create();
-
-    public setAuth0Client = (client: Auth0Client) => {
-        this.auth0Client = client;
-    }
 
     public getAllHomes = async (): Promise<IHome[]> => {
         const response = await this.client.get(`${this.base}/v1/homes`);
