@@ -14,7 +14,7 @@ export class ApiClient {
 
     private client = axios.create({
         headers: {
-            // 'Authorization': 'Basic Z2hvc3Q6dG9vcg==',
+            // 'Authorization': 'Basic dGVzdDp0ZXN0',
         },
     });
 
