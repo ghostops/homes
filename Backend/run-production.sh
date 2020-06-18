@@ -5,7 +5,7 @@ HOMEAPP_NAME=homeapp
 
 docker build -t $HOMEAPP_NAME .
 
-if [ ! "$(docker ps -q -f name=$HOMEAPP_NAME)" ]; then
+if [ "$(docker ps -q -f name=$HOMEAPP_NAME)" ]; then
     docker stop $HOMEAPP_NAME
 fi
 
