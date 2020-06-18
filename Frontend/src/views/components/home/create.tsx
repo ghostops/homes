@@ -28,7 +28,7 @@ export class HSHomeCreator extends React.PureComponent<Props, State> {
         const newHome = await this.props.homesStore?.createHome(this.props.homesStore.createdHome);
 
         if (newHome) {
-            this.props.homesStore?.uploadSelectedImages(newHome.ID);
+            await this.props.homesStore?.uploadSelectedImages(newHome.ID);
             this.props.homesStore?.setCreateHomeStatus('success');
             this.props.mapStore?.setMapClickedLngLat(null);
 
