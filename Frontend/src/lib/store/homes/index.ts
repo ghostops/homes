@@ -22,13 +22,9 @@ export const HSHomesStoreDefaults: IHSHomesStore = {
 };
 
 export class HSHomesStore {
-    private apiClient: ApiClient = new ApiClient(
+    public apiClient: ApiClient = new ApiClient(
         process.env.REACT_APP_API_ROOT as string,
     );
-
-    constructor() {
-        this.loadAllHomes();
-    }
 
     private uploadableImages: Blob[] = [];
 

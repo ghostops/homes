@@ -16,6 +16,10 @@ interface Props {
 @inject('mapStore')
 @observer
 export class HSHome extends React.PureComponent<Props> {
+    componentDidMount() {
+        this.props.homesStore?.loadAllHomes();
+    }
+
     selectingHomeCoords = (): boolean => {
         return (
             !!this.props.homesStore?.createHomeStatus &&

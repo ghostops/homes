@@ -16,6 +16,7 @@ func CreateURLMappings() {
 
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"*"}
+	config.AllowHeaders = []string{"Authorization", "Origin"}
 
 	Router.Use(cors.New(config))
 
@@ -23,6 +24,8 @@ func CreateURLMappings() {
 
 	v1 := Router.Group("/v1", gin.BasicAuth(*accounts))
 	{
+		v1.GET("/authentication", controllers.Authentication)
+
 		v1.GET("/homes", controllers.GetAllHomes)
 		v1.GET("/homes/:id", controllers.GetHome)
 		v1.POST("/homes", controllers.CreateHome)

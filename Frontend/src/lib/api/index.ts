@@ -12,11 +12,25 @@ interface HomeOpts {
 export class ApiClient {
     constructor(private base: string) {}
 
-    private client = axios.create({
-        headers: {
-            // 'Authorization': 'Basic dGVzdDp0ZXN0',
-        },
-    });
+    private client = axios.create();
+
+    public setBasicAuthentication = (token: string) => {
+        this.client = axios.create({
+            headers: {
+                'Authorization': `Basic ${token}`,
+            },
+        })
+    }
+
+    public testBasicAuthentication = async (): Promise<boolean> => {
+        const response = await this.client.get(`${this.base}/v1/authentication`);
+
+        if (response.status === 401) {
+            throw new Error('authentication invalid');
+        }
+
+        return response.status === 200;
+    }
 
     public getAllHomes = async (): Promise<IHome[]> => {
         const response = await this.client.get(`${this.base}/v1/homes`);
