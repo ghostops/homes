@@ -7,14 +7,14 @@ class Auth {
         return !!token;
     }
 
-    public setAuthToken = (token: string): void => {
-        window.localStorage.setItem(this.authKey, token);
+    public setAuthToken = (token: string | null): void => {
+        window.localStorage.setItem(this.authKey, String(token));
     }
 
     public getAuthToken = (): string => {
         const token = window.localStorage.getItem(this.authKey);
 
-        if (!token) {
+        if (!token || token === 'null') {
             throw new Error('no auth token found');
         }
 

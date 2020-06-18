@@ -22,14 +22,16 @@ export class ApiClient {
         })
     }
 
-    public testBasicAuthentication = async (): Promise<boolean> => {
+    public testBasicAuthentication = async (): Promise<void> => {
         const response = await this.client.get(`${this.base}/v1/authentication`);
 
-        if (response.status === 401) {
-            throw new Error('authentication invalid');
+        if (response.status !== 200) {
+            if (response.status === 401) {
+                throw new Error('authentication invalid');
+            } else {
+                throw new Error(response.statusText);
+            }
         }
-
-        return response.status === 200;
     }
 
     public getAllHomes = async (): Promise<IHome[]> => {

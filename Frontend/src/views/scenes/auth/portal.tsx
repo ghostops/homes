@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer, inject } from 'mobx-react';
 import { HSHomesStore } from '../../../lib/store/homes';
 import { Authentication } from '../../../lib/auth';
-import { Modal, Form, Button } from 'semantic-ui-react';
+import { Modal, Form, Button, Message } from 'semantic-ui-react';
 
 interface Props {
     onSuccess?: () => void;
@@ -12,6 +12,8 @@ interface Props {
 interface State {
     username: string;
     password: string;
+    error: string;
+    loading: boolean;
 }
 
 @inject('homesStore')
@@ -20,26 +22,26 @@ export class HSAuthPortal extends React.PureComponent<Props, State> {
     state: State = {
         password: '',
         username: '',
+        error: '',
+        loading: false,
     }
 
     authenticate = async (username: string, password: string) => {
+        this.setState({ error: '', loading: true });
+
         const encoded = btoa(`${username}:${password}`);
         this.props.homesStore?.apiClient.setBasicAuthentication(encoded);
 
         try {
-            const valid = await this.props.homesStore?.apiClient.testBasicAuthentication();
+            await this.props.homesStore?.apiClient.testBasicAuthentication();
 
-            if (valid) {
-                Authentication.setAuthToken(encoded);
+            Authentication.setAuthToken(encoded);
 
-                if (this.props.onSuccess) {
-                    this.props.onSuccess();
-                }
-            } else {
-                alert('Something went wrong...');
+            if (this.props.onSuccess) {
+                this.props.onSuccess();
             }
         } catch {
-            alert('Invalid credentials');
+            this.setState({ error: 'Invalid credentials', loading: false });
         }
     }
 
@@ -64,6 +66,14 @@ export class HSAuthPortal extends React.PureComponent<Props, State> {
                 </Modal.Header>
 
                 <Modal.Content>
+                    {
+                        this.state.error &&
+                        <Message negative>
+                            <Message.Header>Login error</Message.Header>
+                            <p>{this.state.error}</p>
+                        </Message>
+                    }
+
                     <Form onSubmit={this.onFormSubmit}>
                         <Form.Field>
                             <label>Username</label>
@@ -91,7 +101,7 @@ export class HSAuthPortal extends React.PureComponent<Props, State> {
 
                         <Button
                             type="submit"
-                            disabled={submitDisabled}
+                            disabled={this.state.loading || submitDisabled}
                             primary
                         >
                             Sign in
